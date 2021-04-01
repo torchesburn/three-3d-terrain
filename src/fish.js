@@ -16,7 +16,10 @@ const _BOID_FORCE_SEPARATION = 20;
 const _BOID_FORCE_COHESION = 10;
 const _BOID_FORCE_WANDER = 3;
 
-
+/**
+ * LineRenderer
+ * 
+ */
 class LineRenderer {
   constructor(game) {
     this._game = game;
@@ -50,7 +53,9 @@ class LineRenderer {
   }
 }
 
-
+/**
+ * Boid
+ */
 class Boid {
   constructor(game, params) {
     this._mesh = new THREE.Mesh(
@@ -305,7 +310,9 @@ class Boid {
   }
 }
 
-
+/**
+ * FishDemo
+ */
 class FishDemo extends game.Game {
   constructor() {
     super();

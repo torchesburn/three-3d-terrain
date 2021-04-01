@@ -1,6 +1,10 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.module.js';
 import Stats from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/libs/stats.module.js';
 import {WEBGL} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/WebGL.js';
+import {EffectComposer} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/postprocessing/EffectComposer.js';
+import {RenderPass} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/postprocessing/RenderPass.js';
+import {GlitchPass } from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/postprocessing/GlitchPass.js';
+import {UnrealBloomPass} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 
 export const graphics = (function() {
@@ -60,6 +64,8 @@ export const graphics = (function() {
       this._threejs = new THREE.WebGLRenderer({
           antialias: this.options.antialias,
       });
+      this._threejs.shadowMap.enabled = true; // SPACE
+      this._threejs.shadowMap.type = THREE.PCFSoftShadowMap; // SPACE
 
       this._threejs.setPixelRatio(window.devicePixelRatio);
       this._threejs.setSize(window.innerWidth, window.innerHeight);
@@ -88,12 +94,26 @@ export const graphics = (function() {
 
       this._CreateLights();
 
+      const composer = new EffectComposer(this._threejs); // Space
+      this._composer = composer; // Space
+      this._composer.addPass(new RenderPass(this._scene, this._camera)); // Space
+
       return true;
     }
 
     //--------------------------------
     _CreateLights() {
-      let light = new THREE.DirectionalLight(0x808080, 1, 100);
+      let light = new THREE.DirectionalLight(0x808080, 1, 100);        light.castShadow = true;
+      // light.shadowCameraVisible = true;
+      // light.shadow.bias = -0.01;
+      // light.shadow.mapSize.width = 2048;
+      // light.shadow.mapSize.height = 2048;
+      // light.shadow.camera.near = 1.0;
+      // light.shadow.camera.far = 500;
+      // light.shadow.camera.left = 200;
+      // light.shadow.camera.right = -200;
+      // light.shadow.camera.top = 200;
+      // light.shadow.camera.bottom = -200;      
       light.position.set(-100, 100, -100);
       light.target.position.set(0, 0, 0);
       light.castShadow = false;
@@ -107,10 +127,22 @@ export const graphics = (function() {
     }
 
     //--------------------------------
+    AddPostFX(passClass, params) {
+      const pass = new passClass();
+      for (const k in params) {
+        pass[k] = params[k];
+      }
+      this._composer.addPass(pass);
+      return pass;
+    }
+
+    //--------------------------------
     _OnWindowResize() {
       this._camera.aspect = window.innerWidth / window.innerHeight;
       this._camera.updateProjectionMatrix();
       this._threejs.setSize(window.innerWidth, window.innerHeight);
+      this._composer.setSize(window.innerWidth, window.innerHeight); // Space
+
     }
     //--------------------------------
 
@@ -124,6 +156,7 @@ export const graphics = (function() {
 
     //--------------------------------
     Render(timeInSeconds) {
+      // this._composer.render();
       this._threejs.render(this._scene, this._camera);
       this._stats.update();
     }
@@ -134,5 +167,9 @@ export const graphics = (function() {
     Graphics: _Graphics,
     GetPixel: _GetPixel,
     GetImageData: _GetImageData,
+    PostFX: {
+      UnrealBloomPass: UnrealBloomPass,
+      GlitchPass: GlitchPass,
+    },
   };
 })();
