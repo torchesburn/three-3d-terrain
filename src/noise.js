@@ -1,14 +1,10 @@
 import 'https://cdn.jsdelivr.net/npm/simplex-noise@2.4.0/simplex-noise.js';
-import perlin from 'https://cdn.jsdelivr.net/gh/mikechambers/es6-perlin-module@master/perlin.js';
+import perlin from 'https://cdn.jsdelivr.net/gh/mikechambers/es6-perlin-module/perlin.js';
 
 import {math} from './math.js';
 
 export const noise = (function() {
 
-  /**
-   * @class _PerlinWrapper
-   * 
-   */
   class _PerlinWrapper {
     constructor() {
     }
@@ -18,10 +14,6 @@ export const noise = (function() {
     }
   }
 
-  /**
-   * @class _RandomWrapper
-   * 
-   */
   class _RandomWrapper {
     constructor() {
       this._values = {};
@@ -57,10 +49,6 @@ export const noise = (function() {
     }
   }
 
-  /**
-   * @class _NoiseGenerator
-   * 
-   */
   class _NoiseGenerator {
     constructor(params) {
       this._params = params;

@@ -1,9 +1,5 @@
 export const spline = (function() {
 
-  /**
-   * _CubicHermiteSpline
-   * 
-   */
   class _CubicHermiteSpline {
     constructor(lerp) {
       this._points = [];
@@ -40,10 +36,6 @@ export const spline = (function() {
     }
   };
 
-  /**
-   * _LinearSpline
-   * 
-   */
   class _LinearSpline {
     constructor(lerp) {
       this._points = [];

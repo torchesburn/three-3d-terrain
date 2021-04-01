@@ -1,9 +1,6 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.module.js';
 import Stats from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/libs/stats.module.js';
 import {WEBGL} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/WebGL.js';
-// import * as THREE from './three.module.js';
-// import Stats from './stats.module.js';
-// import {WEBGL} from './WebGL.js';
 
 
 export const graphics = (function() {
@@ -49,7 +46,7 @@ export const graphics = (function() {
       target.appendChild(this._threejs.domElement);
 
       this._stats = new Stats();
-      target.appendChild(this._stats.dom);
+      //target.appendChild(this._stats.dom);
 
       window.addEventListener('resize', () => {
         this._OnWindowResize();
@@ -58,7 +55,7 @@ export const graphics = (function() {
       const fov = 60;
       const aspect = 1920 / 1080;
       const near = 1;
-      const far = 10000.0;
+      const far = 25000.0;
       this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
       this._camera.position.set(75, 20, 0);
 
