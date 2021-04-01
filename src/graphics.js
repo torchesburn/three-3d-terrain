@@ -73,8 +73,8 @@ export const graphics = (function() {
       const target = document.getElementById(this.targetElementId);
       target.appendChild(this._threejs.domElement);
 
-      this._stats = new Stats();
       if (this.options.showStats) {
+        this._stats = new Stats();
         target.appendChild(this._stats.dom);
       }
 
@@ -158,7 +158,9 @@ export const graphics = (function() {
     Render(timeInSeconds) {
       // this._composer.render();
       this._threejs.render(this._scene, this._camera);
-      this._stats.update();
+      if (this._stats) {
+        this._stats.update();
+      }
     }
     //--------------------------------
   }

@@ -6,7 +6,7 @@ import {OBJLoader} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm
 
 let _APP = null;
 
-const _NUM_BOIDS = 350;
+const _NUM_BOIDS = 180;
 const _BOID_SPEED = 2.5;
 const _BOID_ACCELERATION = _BOID_SPEED / 5.0;
 const _BOID_FORCE_MAX = _BOID_ACCELERATION / 10.0;
@@ -15,6 +15,8 @@ const _BOID_FORCE_ALIGNMENT = 10;
 const _BOID_FORCE_SEPARATION = 20;
 const _BOID_FORCE_COHESION = 10;
 const _BOID_FORCE_WANDER = 3;
+const _FISH_FILENAME = `myFish2.obj`;
+const _BIG_FISH_FILENAME = `bigfish.obj`;
 
 /**
  * LineRenderer
@@ -58,9 +60,11 @@ class LineRenderer {
  */
 class Boid {
   constructor(game, params) {
-    this._mesh = new THREE.Mesh(
-        params.geometry,
-        new THREE.MeshStandardMaterial({color: params.colour}));
+    const material = new THREE.MeshStandardMaterial({
+        color: params.colour,
+        roughness: params.roughness || 1
+      })
+    this._mesh = new THREE.Mesh(params.geometry, material);
     this._mesh.castShadow = true;
     this._mesh.receiveShadow = false;
 
@@ -328,9 +332,9 @@ class FishDemo extends game.Game {
 
     const loader = new OBJLoader();
     const geoLibrary = {};
-    loader.load("./resources/fish.obj", (result) => {
+    loader.load(`./resources/${_FISH_FILENAME}`, (result) => {
       geoLibrary.fish = result.children[0].geometry;
-      loader.load("./resources/bigfish.obj", (result) => {
+      loader.load(`./resources/${_BIG_FISH_FILENAME}`, (result) => {
         geoLibrary.bigFish = result.children[0].geometry;
         this._CreateBoids(geoLibrary);
       });
@@ -370,6 +374,8 @@ class FishDemo extends game.Game {
     const NUM_LARGE = _NUM_BOIDS / 20;
     const NUM_WHALES = 3;
 
+    //--------------------------------------
+    // SMALL
     let params = {
       geometry: geoLibrary.fish,
       speedMin: 3.0,
@@ -377,13 +383,16 @@ class FishDemo extends game.Game {
       speed: _BOID_SPEED,
       maxSteeringForce: _BOID_FORCE_MAX,
       acceleration: _BOID_ACCELERATION,
-      colour: 0x80FF80,
+      colour: 0x22AAFF,
+      roughness: 0.2
     };
     for (let i = 0; i < NUM_SMALL; i++) {
       const e = new Boid(this, params);
       this._entities.push(e);
     }
 
+    //--------------------------------------
+    // MEDIUM
     params = {
       geometry: geoLibrary.fish,
       speedMin: 0.85,
@@ -391,13 +400,16 @@ class FishDemo extends game.Game {
       speed: _BOID_SPEED,
       maxSteeringForce: _BOID_FORCE_MAX,
       acceleration: _BOID_ACCELERATION,
-      colour: 0x8080FF,
+      colour: 0x10BB88,
+      roughness: 0.4
     };
     for (let i = 0; i < NUM_MEDIUM; i++) {
       const e = new Boid(this, params);
       this._entities.push(e);
     }
 
+    //--------------------------------------
+    // LARGE
     params = {
       geometry: geoLibrary.fish,
       speedMin: 0.4,
@@ -406,12 +418,15 @@ class FishDemo extends game.Game {
       maxSteeringForce: _BOID_FORCE_MAX / 4,
       acceleration: _BOID_ACCELERATION,
       colour: 0xFF8080,
+      roughness: 0.6
     };
     for (let i = 0; i < NUM_LARGE; i++) {
       const e = new Boid(this, params);
       this._entities.push(e);
     }
 
+    //--------------------------------------
+    // WHALES
     params = {
       geometry: geoLibrary.bigFish,
       speedMin: 0.1,
@@ -419,7 +434,8 @@ class FishDemo extends game.Game {
       speed: _BOID_SPEED,
       maxSteeringForce: _BOID_FORCE_MAX / 20,
       acceleration: _BOID_ACCELERATION,
-      colour: 0xFF8080,
+      colour: 0x208080,
+      roughness: 1
     };
     for (let i = 0; i < NUM_WHALES; i++) {
       const e = new Boid(this, params);

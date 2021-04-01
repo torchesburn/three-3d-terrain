@@ -20,10 +20,11 @@ const _GREEN = new THREE.Color(0x80FF80);
 const _RED = new THREE.Color(0xFF8080);
 const _BLACK = new THREE.Color(0x000000);
 
-const _MIN_CELL_SIZE = 500;
-const _FIXED_GRID_SIZE = 10;
-const _MIN_CELL_RESOLUTION = 64;
-
+const _MIN_CELL_SIZE = 500; // 500
+const _FIXED_GRID_SIZE = 10; // 10
+const _MIN_CELL_RESOLUTION = 64; // 64
+const HEIGHT_GEN_RADIUS = 100000; // 100000
+const QUADTREE_VECTOR_SIZE = 32000; // 32000
 
 export const terrain = (function() {
 
@@ -390,6 +391,7 @@ export const terrain = (function() {
       this.noiseOptions = (params.terrainOptions || {}).noiseOptions || {};
       this.biomesOptions = (params.terrainOptions || {}).biomesOptions || {};
       this.terrainOptions = (params.terrainOptions || {}).terrainOptions || {};
+      this.terrainOptions.wireframe = this.terrainOptions.wireframe || true;
       this._Init(params);
     }
 
@@ -398,7 +400,7 @@ export const terrain = (function() {
       this._params = params;
 
       this._material = new THREE.MeshStandardMaterial({
-        wireframe: false,
+        wireframe: this.terrainOptions.wireframe,
         wireframeLinewidth: 1,
         color: 0xFFFFFF,
         side: THREE.FrontSide,
@@ -482,8 +484,9 @@ export const terrain = (function() {
 
     //------------------------------------
     _InitTerrain(params) {
+      console.log('[_InitTerrain]', this);
       params.guiParams.terrain = {
-        wireframe: false,
+        wireframe: this.terrainOptions.wireframe,
       };
 
       this._group = new THREE.Group()
@@ -519,7 +522,7 @@ export const terrain = (function() {
         resolution: _MIN_CELL_RESOLUTION,
         biomeGenerator: this._biomes,
         colourGenerator: new HyposemetricTints({biomeGenerator: this._biomes}),
-        heightGenerators: [new HeightGenerator(this._noise, offset, 100000, 100000 + 1)],
+        heightGenerators: [new HeightGenerator(this._noise, offset, HEIGHT_GEN_RADIUS, HEIGHT_GEN_RADIUS + 1)],
       };
 
       return this._builder.AllocateChunk(params);
@@ -540,8 +543,8 @@ export const terrain = (function() {
       }
 
       const q = new quadtree.QuadTree({
-        min: new THREE.Vector2(-32000, -32000),
-        max: new THREE.Vector2(32000, 32000),
+        min: new THREE.Vector2(-QUADTREE_VECTOR_SIZE, -QUADTREE_VECTOR_SIZE),
+        max: new THREE.Vector2(QUADTREE_VECTOR_SIZE, QUADTREE_VECTOR_SIZE),
       });
       q.Insert(this._params.camera.position);
 

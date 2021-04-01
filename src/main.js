@@ -93,6 +93,9 @@ function _Main() {
     waterOptions: {
       width: 100,
       height: 100
+    },
+    terrainOptions: {
+      wireframe: true
     }
   });
 }

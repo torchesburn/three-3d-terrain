@@ -3,8 +3,9 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.m
 
 export const quadtree = (function() {
 
-  const _MIN_NODE_SIZE = 500;
+  const _MIN_NODE_SIZE = 500; // 500
 
+  //-------------------------------------------------------------------
   /**
    * QuadTree
    * 
@@ -20,12 +21,14 @@ export const quadtree = (function() {
       };
     }
 
+    //------------------------------------------
     GetChildren() {
       const children = [];
       this._GetChildren(this._root, children);
       return children;
     }
 
+    //------------------------------------------
     _GetChildren(node, target) {
       if (node.children.length == 0) {
         target.push(node);
@@ -37,10 +40,12 @@ export const quadtree = (function() {
       }
     }
 
+    //------------------------------------------
     Insert(pos) {
       this._Insert(this._root, new THREE.Vector2(pos.x, pos.z));
     }
 
+    //------------------------------------------
     _Insert(child, pos) {
       const distToChild = this._DistanceToChild(child, pos);
 
@@ -52,11 +57,13 @@ export const quadtree = (function() {
         }
       }
     }
+    //------------------------------------------
 
     _DistanceToChild(child, pos) {
       return child.center.distanceTo(pos);
     }
 
+    //------------------------------------------
     _CreateChildren(child) {
       const midpoint = child.bounds.getCenter(new THREE.Vector2());
 
@@ -88,6 +95,7 @@ export const quadtree = (function() {
 
       return children;
     }
+    //------------------------------------------
   }
 
   return {
