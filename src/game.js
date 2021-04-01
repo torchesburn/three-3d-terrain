@@ -5,13 +5,23 @@ import {graphics} from './graphics.js';
 
 export const game = (function() {
   return {
+    //--------------------------------
+    /**
+     * Game
+     * 
+     */
+    //--------------------------------
     Game: class {
-      constructor() {
+      constructor(options = {}) {
+        console.log('[Game][constructor]', options);
+        this.options = options;
         this._Initialize();
       }
 
+      //--------------------------------
       _Initialize() {
-        this._graphics = new graphics.Graphics(this);
+        this._graphics = new graphics.Graphics(this.options);
+
         if (!this._graphics.Initialize()) {
           this._DisplayError('WebGL2 is not available.');
           return;
@@ -25,11 +35,13 @@ export const game = (function() {
         this._RAF();
       }
 
+      //--------------------------------
       _DisplayError(errorText) {
         const error = document.getElementById('error');
         error.innerText = errorText;
       }
 
+      //--------------------------------
       _RAF() {
         requestAnimationFrame((t) => {
           if (this._previousRAF === null) {
@@ -40,12 +52,14 @@ export const game = (function() {
         });
       }
 
+      //--------------------------------
       _StepEntities(timeInSeconds) {
         for (let k in this._entities) {
           this._entities[k].Update(timeInSeconds);
         }
       }
 
+      //--------------------------------
       _Render(timeInMS) {
         const timeInSeconds = Math.min(timeInMS * 0.001, this._minFrameTime);
 
@@ -55,6 +69,7 @@ export const game = (function() {
 
         this._RAF();
       }
+      //--------------------------------
     }
   };
 })();

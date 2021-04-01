@@ -6,7 +6,6 @@ import {Water} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/obj
 
 export const sky = (function() {
 
-  //------------------------------------------
   /**
    * TerrainSky
    * 
@@ -14,36 +13,27 @@ export const sky = (function() {
   class TerrainSky {
     constructor(params) {
       this._params = params;
-      this.skyOptions = params.skyOptions || {};
-      this.waterOptions = params.waterOptions || {};
-
-      this.waterOptions.width = this.waterOptions.width || 1000;
-      this.waterOptions.height = this.waterOptions.height || 1000;
-      this.waterOptions.widthSegments = this.waterOptions.widthSegments || 100;
-      this.waterOptions.heightSegments = this.waterOptions.heightSegments || 100;
-
       this._Init(params);
     }
 
-    //-----------------------------
     _Init(params) {
-      const { width, height, widthSegments, heightSegments } = this.waterOptions;
-      const waterGeometry = new THREE.PlaneBufferGeometry(width, height, widthSegments, heightSegments);
+      const waterGeometry = new THREE.PlaneBufferGeometry(10000, 10000, 100, 100);
 
-      //----------------------------------------------
       this._water = new Water(
         waterGeometry,
         {
           textureWidth: 2048,
           textureHeight: 2048,
           waterNormals: new THREE.TextureLoader().load('resources/waternormals.jpg', function(texture) {
+
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+
           }),
-          alpha: this.skyOptions.alpha || 0.5,
+          alpha: 0.5,
           sunDirection: new THREE.Vector3(1, 0, 0),
-          sunColor: this.skyOptions.sunColor || 0xffffff,
-          waterColor: this.waterOptions.waterColor || 0x001e0f,
-          distortionScale: this.skyOptions.distortionScale || 0.0,
+          sunColor: 0xffffff,
+          waterColor: 0x001e0f,
+          distortionScale: 0.0,
           fog: undefined
         }
       );
@@ -59,31 +49,20 @@ export const sky = (function() {
 
       params.scene.add(this._group);
 
-      //----------------------------------------------
-      params.guiParams.water = {
-        alpha: this.skyOptions.alpha || 0.5,
-        distortionScale: this.skyOptions.distortionScale || 0.0,
-      };
-      //----------------------------------------------
       params.guiParams.sky = {
-        turbidity: this.skyOptions.turbidity || 10.0,
-        rayleigh: this.skyOptions.rayleigh || 2,
-        mieCoefficient: this.skyOptions.mieCoefficient || 0.005,
-        mieDirectionalG: this.skyOptions.mieDirectionalG || 0.8,
-        luminance: this.skyOptions.luminance || 1,
+        turbidity: 10.0,
+        rayleigh: 2,
+        mieCoefficient: 0.005,
+        mieDirectionalG: 0.8,
+        luminance: 1,
       };
 
-      //----------------------------------------------
       params.guiParams.sun = {
-        inclination: this.skyOptions.inclination || 0.31,
-        azimuth: this.skyOptions.azimuth || 0.25,
+        inclination: 0.31,
+        azimuth: 0.25,
       };
 
-      //----------------------------------------------
       const onShaderChange = () => {
-        for (let k in params.guiParams.water) {
-          this._water.material.uniforms[k].value = params.guiParams.water[k];
-        }
         for (let k in params.guiParams.sky) {
           this._sky.material.uniforms[k].value = params.guiParams.sky[k];
         }
@@ -116,23 +95,16 @@ export const sky = (function() {
       sunRollup.add(params.guiParams.sun, "inclination", 0.0, 1.0).onChange(onSunChange);
       sunRollup.add(params.guiParams.sun, "azimuth", 0.0, 1.0).onChange(onSunChange);
 
-      const waterRollup = params.gui.addFolder('Water');
-      waterRollup.add(params.guiParams.water, "alpha", 0.1, 1.0).onChange(onShaderChange);
-      waterRollup.add(params.guiParams.water, "distortionScale", 0.0, 5.0).onChange(onShaderChange);
-
-
       onShaderChange();
       onSunChange();
     }
 
-    //-----------------------------
     Update(timeInSeconds) {
       this._water.material.uniforms['time'].value += timeInSeconds;
 
       this._group.position.x = this._params.camera.position.x;
       this._group.position.z = this._params.camera.position.z;
     }
-    //-----------------------------
   }
 
 

@@ -5,6 +5,7 @@ import {WEBGL} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/Web
 
 export const graphics = (function() {
 
+  //------------------------------------------------------------------
   function _GetImageData(image) {
     const canvas = document.createElement('canvas');
     canvas.width = image.width;
@@ -26,36 +27,59 @@ export const graphics = (function() {
         a: data[position + 3]
     };
   }
+  //------------------------------------------------------------------
 
   class _Graphics {
-    constructor(game) {
+    constructor({
+      targetElementId = 'target',
+      graphics = {
+        antialias: true,
+        fov: 60,
+        aspect: 1920 / 1080,
+        near: 1,
+        far: 25000.0,
+        showStats: false
+      }
+    } = {}) {
+      this.targetElementId = targetElementId;
+      this.options = graphics;
+      // this.antialias = graphics.antialias;
+      // this.fov = graphics.fov;
+      // this.aspect = graphics.aspect;
+      // this.near = graphics.near;
+      // this.far = graphics.far;
+      // this.showStats = graphics.showStats;
     }
 
+    //--------------------------------
     Initialize() {
       if (!WEBGL.isWebGL2Available()) {
         return false;
       }
 
       this._threejs = new THREE.WebGLRenderer({
-          antialias: true,
+          antialias: this.options.antialias,
       });
+
       this._threejs.setPixelRatio(window.devicePixelRatio);
       this._threejs.setSize(window.innerWidth, window.innerHeight);
 
-      const target = document.getElementById('target');
+      const target = document.getElementById(this.targetElementId);
       target.appendChild(this._threejs.domElement);
 
       this._stats = new Stats();
-      //target.appendChild(this._stats.dom);
+      if (this.options.showStats) {
+        target.appendChild(this._stats.dom);
+      }
 
       window.addEventListener('resize', () => {
         this._OnWindowResize();
       }, false);
 
-      const fov = 60;
-      const aspect = 1920 / 1080;
-      const near = 1;
-      const far = 100000.0;
+      const fov = this.options.fov; // 60;
+      const aspect = this.options.aspect; // 1920 / 1080;
+      const near = this.options.near; // 1;
+      const far = this.options.far; // 25000.0;
       this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
       this._camera.position.set(75, 20, 0);
 
@@ -67,37 +91,28 @@ export const graphics = (function() {
       return true;
     }
 
+    //--------------------------------
     _CreateLights() {
-      let light = new THREE.DirectionalLight(0xFFFFFF, 1, 100);
+      let light = new THREE.DirectionalLight(0x808080, 1, 100);
       light.position.set(-100, 100, -100);
       light.target.position.set(0, 0, 0);
       light.castShadow = false;
       this._scene.add(light);
 
-      light = new THREE.DirectionalLight(0x404040, 1, 100);
+      light = new THREE.DirectionalLight(0x404040, 1.5, 100);
       light.position.set(100, 100, -100);
-      light.target.position.set(0, 0, 0);
-      light.castShadow = false;
-      this._scene.add(light);
-
-      light = new THREE.DirectionalLight(0x404040, 1, 100);
-      light.position.set(100, 100, -100);
-      light.target.position.set(0, 0, 0);
-      light.castShadow = false;
-      this._scene.add(light);
-
-      light = new THREE.DirectionalLight(0x101040, 1, 100);
-      light.position.set(100, -100, 100);
       light.target.position.set(0, 0, 0);
       light.castShadow = false;
       this._scene.add(light);
     }
 
+    //--------------------------------
     _OnWindowResize() {
       this._camera.aspect = window.innerWidth / window.innerHeight;
       this._camera.updateProjectionMatrix();
       this._threejs.setSize(window.innerWidth, window.innerHeight);
     }
+    //--------------------------------
 
     get Scene() {
       return this._scene;
@@ -107,10 +122,12 @@ export const graphics = (function() {
       return this._camera;
     }
 
+    //--------------------------------
     Render(timeInSeconds) {
       this._threejs.render(this._scene, this._camera);
       this._stats.update();
     }
+    //--------------------------------
   }
 
   return {

@@ -3,6 +3,10 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.m
 
 export const terrain_chunk = (function() {
 
+  /**
+   * TerrainChunk
+   * 
+   */
   class TerrainChunk {
     constructor(params) {
       this._params = params;
