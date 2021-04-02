@@ -22,10 +22,13 @@ class ProceduralTerrain_Demo extends game.Game {
 
   //--------------------------------
   _OnInitialize() {
+    //-------------------------
     this._CreateGUI();
 
+    //-------------------------
     this._userCamera = new THREE.Object3D();
     this._userCamera.position.set(475, 75, 900);
+    this._graphics.Camera.position.copy(this._userCamera.position);
 
     //-------------------------
     this._entities['_terrain'] = new terrain.TerrainChunkManager({
@@ -51,9 +54,7 @@ class ProceduralTerrain_Demo extends game.Game {
       scene: this._graphics.Scene,
       camera: this._userCamera
     });
-
     //-------------------------
-    this._graphics.Camera.position.copy(this._userCamera.position);
 
     this._LoadBackground();
     //-------------------------

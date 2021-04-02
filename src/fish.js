@@ -314,22 +314,27 @@ class Boid {
   }
 }
 
+//--------------------------------------------------------------
 /**
  * FishDemo
+ * 
  */
 class FishDemo extends game.Game {
+  //--------------------------------
   constructor() {
     super();
   }
 
+  //--------------------------------
   _OnInitialize() {
+    //-------------------------
     this._entities = [];
 
-    this._graphics.Scene.fog = new THREE.FogExp2(
-        new THREE.Color(0x4d7dbe), 0.01);
-
+    //-------------------------
+    this._graphics.Scene.fog = new THREE.FogExp2(new THREE.Color(0x4d7dbe), 0.01);
     this._LoadBackground();
 
+    //-------------------------
     const loader = new OBJLoader();
     const geoLibrary = {};
     loader.load(`./resources/${_FISH_FILENAME}`, (result) => {
@@ -339,15 +344,20 @@ class FishDemo extends game.Game {
         this._CreateBoids(geoLibrary);
       });
     });
+    //-------------------------
+
     this._CreateEntities();
+    //-------------------------
   }
 
+  //--------------------------------
   _LoadBackground() {
     const loader = new THREE.TextureLoader();
     const texture = loader.load('./resources/underwater.jpg');
     this._graphics._scene.background = texture;
   }
 
+  //--------------------------------
   _CreateEntities() {
     const plane = new THREE.Mesh(
         new THREE.PlaneGeometry(400, 400, 32, 32),
@@ -368,6 +378,7 @@ class FishDemo extends game.Game {
 
   }
 
+  //--------------------------------
   _CreateBoids(geoLibrary) {
     const NUM_SMALL = _NUM_BOIDS * 2;
     const NUM_MEDIUM = _NUM_BOIDS / 2;
@@ -386,6 +397,7 @@ class FishDemo extends game.Game {
       colour: 0x22AAFF,
       roughness: 0.2
     };
+
     for (let i = 0; i < NUM_SMALL; i++) {
       const e = new Boid(this, params);
       this._entities.push(e);
@@ -403,6 +415,7 @@ class FishDemo extends game.Game {
       colour: 0x10BB88,
       roughness: 0.4
     };
+
     for (let i = 0; i < NUM_MEDIUM; i++) {
       const e = new Boid(this, params);
       this._entities.push(e);
@@ -420,6 +433,7 @@ class FishDemo extends game.Game {
       colour: 0xFF8080,
       roughness: 0.6
     };
+
     for (let i = 0; i < NUM_LARGE; i++) {
       const e = new Boid(this, params);
       this._entities.push(e);
@@ -437,6 +451,7 @@ class FishDemo extends game.Game {
       colour: 0x208080,
       roughness: 1
     };
+    
     for (let i = 0; i < NUM_WHALES; i++) {
       const e = new Boid(this, params);
       e._group.position.y = math.rand_range(23, 26);
@@ -445,6 +460,7 @@ class FishDemo extends game.Game {
     //this._entities[0].DisplayDebug();
   }
 
+  //--------------------------------
   _OnStep(timeInSeconds) {
     timeInSeconds = Math.min(timeInSeconds, 1 / 10.0);
 
@@ -473,6 +489,7 @@ class FishDemo extends game.Game {
       e.Step(timeInSeconds);
     }
   }
+  //--------------------------------
 }
 
 

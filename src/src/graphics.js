@@ -103,7 +103,8 @@ export const graphics = (function() {
 
     //--------------------------------
     _CreateLights() {
-      let light = new THREE.DirectionalLight(0x808080, 1, 100);        light.castShadow = true;
+      let light = new THREE.DirectionalLight(0x808080, 1, 100);        
+      light.castShadow = true;
       // light.shadowCameraVisible = true;
       // light.shadow.bias = -0.01;
       // light.shadow.mapSize.width = 2048;

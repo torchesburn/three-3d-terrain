@@ -13,6 +13,7 @@ export const game = (function() {
      */
     //--------------------------------
     Game: class {
+      //--------------------------------
       constructor(options = {}) {
         console.log('[Game][constructor]', options);
         this.options = options;
@@ -40,8 +41,7 @@ export const game = (function() {
 
       //--------------------------------
       _CreateControls() {
-        const controls = new OrbitControls(
-            this._graphics._camera, this._graphics._threejs.domElement);
+        const controls = new OrbitControls(this._graphics._camera, this._graphics._threejs.domElement);
         controls.target.set(0, 0, 0);
         controls.update();
         return controls;
@@ -65,10 +65,10 @@ export const game = (function() {
       }
 
       //--------------------------------
-      _StepEntities(timeInSeconds) {
+      _StepEntities(timeInSeconds, timeInMS) {
         for (let k in this._entities) {
           if (this._entities[k].Update) {
-            this._entities[k].Update(timeInSeconds);
+            this._entities[k].Update(timeInSeconds, timeInMS);
           }
         }
       }
@@ -77,8 +77,8 @@ export const game = (function() {
       _Render(timeInMS) {
         const timeInSeconds = Math.min(timeInMS * 0.001, this._minFrameTime);
 
-        this._OnStep(timeInSeconds);
-        this._StepEntities(timeInSeconds);
+        this._OnStep(timeInSeconds, timeInMS);
+        this._StepEntities(timeInSeconds, timeInMS);
         this._graphics.Render(timeInSeconds);
 
         this._RAF();
