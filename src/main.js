@@ -1,9 +1,9 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.module.js';
 import {GUI} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/libs/dat.gui.module.js';
-import {controls} from './controls.js';
-import {game} from './game.js';
-import {sky} from './sky.js';
-import {terrain} from './terrain.js';
+import {controls} from './src/controls.js';
+import {game} from './src/game.js';
+import {sky} from './src/sky.js';
+import {terrain} from './src/terrain.js';
 
 
 let _APP = null;

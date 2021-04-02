@@ -1,7 +1,7 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.module.js';
-import {game} from './game.js';
-import {math} from './math.js';
-import {visibility} from './visibility.js';
+import {game} from './src/game.js';
+import {math} from './src/math.js';
+import {visibility} from './src/visibility.js';
 import {OBJLoader} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/loaders/OBJLoader.js';
 
 let _APP = null;

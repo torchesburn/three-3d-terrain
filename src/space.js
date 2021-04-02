@@ -1,10 +1,10 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.module.js';
-import {game} from './game.js';
-import {graphics} from './graphics.js';
-import {math} from './math.js';
-import {visibility} from './visibility.js';
-import {particles} from './particles.js';
-import {blaster} from './blaster.js';
+import {game} from './src/game.js';
+import {graphics} from './src/graphics.js';
+import {math} from './src/math.js';
+import {visibility} from './src/visibility.js';
+import {particles} from './src/particles.js';
+import {blaster} from './src/blaster.js';
 import {OBJLoader} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/loaders/OBJLoader.js';
 
 let _APP = null;

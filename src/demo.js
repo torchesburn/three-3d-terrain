@@ -1,7 +1,7 @@
-import {game} from './game.js';
-import {graphics} from './graphics.js';
-import {math} from './math.js';
-import {noise} from './noise.js';
+import {game} from './src/game.js';
+import {graphics} from './src/graphics.js';
+import {math} from './src/math.js';
+import {noise} from './src/noise.js';
 
 
 window.onload = function() {
